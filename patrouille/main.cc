@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <optional>
+#include <string>
 
 #include <SFML/Graphics.hpp>
 
@@ -20,9 +21,17 @@ constexpr float kDepartY = 540.f;
 
 constexpr float kDistanceOuOnLEntend = 260.f;
 
+const char* const kCheminDeLaPolice = "C:/Windows/Fonts/segoeui.ttf";
+
 }  // namespace
 
 int main() {
+  sf::Font police;
+  if (!police.openFromFile(kCheminDeLaPolice)) {
+    std::cerr << "Police introuvable : " << kCheminDeLaPolice << std::endl;
+    return 1;
+  }
+
   sf::RenderWindow fenetre(sf::VideoMode({800u, 600u}), "Patrouille");
   fenetre.setFramerateLimit(60);
 
@@ -32,12 +41,16 @@ int main() {
   float joueur_x = kDepartX;
   float joueur_y = kDepartY;
   bool on_l_entend = false;
+  std::string message;
 
   sf::RectangleShape joueur({kTailleDuJoueur, kTailleDuJoueur});
   joueur.setOrigin({kTailleDuJoueur / 2.f, kTailleDuJoueur / 2.f});
   joueur.setFillColor(sf::Color(90, 200, 130));
 
-  std::cout << "Patrouille -- fleches pour se deplacer, la porte jaune est la sortie."
+  sf::Text ligne(police, "", 16);
+
+  std::cout << "Patrouille -- clique dans la fenetre, puis fleches pour te deplacer. "
+               "La porte jaune est la sortie."
             << std::endl;
 
   while (fenetre.isOpen()) {
@@ -69,12 +82,14 @@ int main() {
     } else if (distance >= kDistanceOuOnLEntend) {
       on_l_entend = false;
     }
+    message = on_l_entend ? "Tu entends le garde respirer." : "";
 
     const bool repere = garde.VoitLeJoueur(joueur_x, joueur_y);
     if (repere) {
       std::cout << "Repere. Retour au depart." << std::endl;
       joueur_x = kDepartX;
       joueur_y = kDepartY;
+      message = "Repere. Retour au depart.";
     }
 
     if (salle.EstSurLaSortie(joueur_x, joueur_y)) {
@@ -88,6 +103,18 @@ int main() {
     salle.Dessiner(fenetre);
     garde.Dessiner(fenetre, repere);
     fenetre.draw(joueur);
+
+    ligne.setFillColor(sf::Color(140, 149, 168));
+    ligne.setString("Fleches : se deplacer       Objectif : la porte jaune, sans entrer dans "
+                    "le cone du garde");
+    ligne.setPosition({24.f, 16.f});
+    fenetre.draw(ligne);
+
+    ligne.setFillColor(sf::Color(224, 160, 90));
+    ligne.setString(message);
+    ligne.setPosition({24.f, 40.f});
+    fenetre.draw(ligne);
+
     fenetre.display();
   }
 }
