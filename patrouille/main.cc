@@ -24,10 +24,10 @@ constexpr float kDistanceOuOnLEntend = 260.f;
 }  // namespace
 
 int main() {
-  const std::string chemin_de_la_police = std::string(DOSSIER_DES_ASSETS) + "/tuffy.ttf";
+  // La police est livree dans data/, que CMake copie a cote de l'executable.
   sf::Font police;
-  if (!police.openFromFile(chemin_de_la_police)) {
-    std::cerr << "Police introuvable : " << chemin_de_la_police << std::endl;
+  if (!police.openFromFile("data/tuffy.ttf")) {
+    std::cerr << "Police introuvable : data/tuffy.ttf" << std::endl;
     return 1;
   }
 
