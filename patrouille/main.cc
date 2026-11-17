@@ -21,14 +21,13 @@ constexpr float kDepartY = 540.f;
 
 constexpr float kDistanceOuOnLEntend = 260.f;
 
-const char* const kCheminDeLaPolice = "C:/Windows/Fonts/segoeui.ttf";
-
 }  // namespace
 
 int main() {
+  const std::string chemin_de_la_police = std::string(DOSSIER_DES_ASSETS) + "/tuffy.ttf";
   sf::Font police;
-  if (!police.openFromFile(kCheminDeLaPolice)) {
-    std::cerr << "Police introuvable : " << kCheminDeLaPolice << std::endl;
+  if (!police.openFromFile(chemin_de_la_police)) {
+    std::cerr << "Police introuvable : " << chemin_de_la_police << std::endl;
     return 1;
   }
 
@@ -105,8 +104,7 @@ int main() {
     fenetre.draw(joueur);
 
     ligne.setFillColor(sf::Color(140, 149, 168));
-    ligne.setString("Fleches : se deplacer       Objectif : la porte jaune, sans entrer dans "
-                    "le cone du garde");
+    ligne.setString("Fleches : se deplacer     Objectif : la porte jaune, sans te faire voir");
     ligne.setPosition({24.f, 16.f});
     fenetre.draw(ligne);
 
